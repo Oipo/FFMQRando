@@ -9,16 +9,16 @@ namespace FFMQLib
 
     public class Overworld
     {
-        private const int OWObjectBank = 0x07;
-        private const int OWObjectOffset = 0xEB44;
-        private const int OWObjectQty = 0x8F;
+        public const int OWObjectBank = 0x07;
+        public const int OWObjectOffset = 0xEB44;
+        public const int OWObjectQty = 0x8F;
 
-        private List<OverworldObject> owObjects;
+        public List<OverworldObject> owObjects;
 
 
         public Overworld(FFMQRom rom)
         {
-            owObjects = rom.GetFromBank(OWObjectBank, OWObjectOffset, 5 * OWObjectQty).Chunk(5).Select(x => new OverworldObject(x)).ToList();
+            owObjects = rom.GetFromBank(OWObjectBank, OWObjectOffset, 5 * OWObjectQty).Chunk(5).Select((x, index) => new OverworldObject(rom, index, x)).ToList();
         }
 
         public void UpdateBattlefieldsColor(Flags flags, Battlefields battlefields)
@@ -66,9 +66,13 @@ namespace FFMQLib
     public class OverworldObject
     {
         private byte[] _data = new byte[5];
+        public int OffsetBegin { get; set; }
+        public int OffsetEnd { get; set; }
 
-        public OverworldObject(byte[] data)
+        public OverworldObject(FFMQRom rom, int id, byte[] data)
         {
+            OffsetBegin = rom.GetOffset(Overworld.OWObjectBank, Overworld.OWObjectOffset + (id * 5));
+            OffsetEnd = OffsetBegin + 5;
             _data[0] = data[0];
             _data[1] = data[1];
             _data[2] = data[2];

@@ -1,0 +1,48 @@
+<h2 id="seedSection" class="text-secondary">Seed Information</h2>
+
+@if (rom != null && rom.Attacks != null && rom.Attacks.AllAttacks() != null)
+{   
+<h3 class="text-secondary">Attacks - @flags2.EnemizerAttacks.ToString()</h3>
+@foreach(var attack in rom.Attacks.AllAttacks())
+{
+    <div class="text-light">@attack.Id() - @attack.raw(0) - @attack.raw(1) - @attack.raw(2) - @attack.raw(3) - @attack.raw(4) - @attack.raw(5) - @attack.raw(6) + @attack.OffsetBegin.ToString("X") - @attack.OffsetEnd.ToString("X")</div>
+}
+<h3 class="text-secondary">Enemies Stats</h3>
+@foreach(var enemy in rom.enemiesStats.Enemies())
+{
+    <div class="text-light">@enemy.Id() - 0x @enemy.raw(0).ToString("X") - 0x @enemy.raw(1).ToString("X") - 0x @enemy.raw(2).ToString("X") - 0x @enemy.raw(3).ToString("X") - 0x @enemy.raw(4).ToString("X") - 0x @enemy.raw(5).ToString("X") - @enemy.raw(6) - @enemy.raw(7) - @enemy.raw(8) - @enemy.raw(9) - 0x @enemy.raw(0x0a).ToString("X") - 0x @enemy.raw(0x0b).ToString("X") - @enemy.raw(0x0c) - @enemy.raw(0x0d) + @enemy.OffsetBegin.ToString("X") - @enemy.OffsetEnd.ToString("X")</div>
+}
+<h3 class="text-secondary">Enemies Attacks</h3>
+@foreach(var attack in rom.EnemyAttackLinks.AllAttacks())
+{
+    <div class="text-light">@attack.Id() - @attack.raw(0) - @attack.raw(1).ToString("X") - @attack.raw(2).ToString("X") - @attack.raw(3).ToString("X") - @attack.raw(4).ToString("X") - @attack.raw(5).ToString("X") - @attack.raw(6).ToString("X") - @attack.raw(7) - @attack.raw(8) + @attack.OffsetBegin.ToString("X") - @attack.OffsetEnd.ToString("X")</div>
+}
+<h3 class="text-secondary">Overworld</h3>
+@foreach(var obj in rom.Overworld.owObjects)
+{
+<div class="text-light">@obj.OffsetBegin.ToString("X") - @obj.OffsetEnd.ToString("X") - @obj.Data[0].ToString("X") - @obj.Data[1].ToString("X") - @obj.Data[2].ToString("X") - @obj.Data[3].ToString("X") - @obj.Data[4].ToString("X")</div>
+}
+<h3 class="text-secondary">Maps</h3>
+@foreach(var map in rom.GameMaps._gameMaps)
+{
+<div class="text-light">@map.AttributesOffsetBegin.ToString("X") - @map.AttributesOffsetEnd.ToString("X")</div>
+}
+
+
+<h3 class="text-secondary">Battlefields</h3>
+<div class="text-light">qty: @rom.Battlefields._battlesQty.Count.ToString("X")</div>
+<div class="text-light">Battles: @rom.Battlefields.BattlesOffsetBegin.ToString("X") - @rom.Battlefields.BattlesOffsetEnd.ToString("X")</div>
+<div class="text-light">Rewards: @rom.Battlefields.RewardsOffsetBegin.ToString("X") - @rom.Battlefields.RewardsOffsetEnd.ToString("X")</div>
+}
+
+<div><br /><br /><br /></div>
+
+
+@code{
+    [Parameter]
+    public FFMQLib.FFMQRom rom { get; set; }
+
+    [Parameter]
+    public FFMQLib.Flags flags2 { get; set; }
+
+}

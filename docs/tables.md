@@ -37,6 +37,7 @@ Length = 9
 | 6 | Slime |
 | 16 | Land Worm |
 | 32 | Centaur |
+| 64 | Skullrus Rex |
 | 75 | Ice Golem |
 | 76 | Twinhead Hydra |
 | 77 | Twinhead Wyvern |

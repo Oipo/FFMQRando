@@ -166,15 +166,25 @@ namespace FFMQLib
 
 		private const int BattlefieldsQty = 0x14;
 
-		private List<byte> _battlesQty;
-		private List<Blob> _rewards;
+		public List<byte> _battlesQty;
+		public List<Blob> _rewards;
 
 		public List<Locations> BattlefieldsWithItem;
+        public int BattlesOffsetBegin { get; set; }
+        public int BattlesOffsetEnd { get; set; }
+        public int RewardsOffsetBegin { get; set; }
+        public int RewardsOffsetEnd { get; set; }
 
 		public Battlefields(FFMQRom rom)
 		{
 			_battlesQty = rom.GetFromBank(0x0C, 0xD4D0, BattlefieldsQty).Chunk(1).Select(x => x[0]).ToList();
 			_rewards = rom.GetFromBank(BattlefieldsRewardsBank, BattlefieldsRewardsOffset, BattlefieldsQty * 2).Chunk(2);
+
+            BattlesOffsetBegin = rom.GetOffset(0x0C, 0xD4D0);
+            BattlesOffsetEnd = BattlesOffsetBegin + BattlefieldsQty;
+
+            RewardsOffsetBegin = rom.GetOffset(BattlefieldsRewardsBank, BattlefieldsRewardsOffset);
+            RewardsOffsetEnd = RewardsOffsetBegin + BattlefieldsQty * 2;
 
 			BattlefieldsWithItem = new();
 

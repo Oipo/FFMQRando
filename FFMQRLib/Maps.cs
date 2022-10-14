@@ -47,7 +47,7 @@ namespace FFMQLib
 
 	public class GameMaps
 	{
-		private List<Map> _gameMaps;
+		public List<Map> _gameMaps;
 		public TilesProperties TilesProperties { get; set; }
 		public GameMaps(FFMQRom rom)
 		{
@@ -514,6 +514,8 @@ namespace FFMQLib
 		private List<byte> _mapCompressedData;
 		private List<SingleTile> _tileData;
 		public bool ModifiedMap { get; set; }
+        public int AttributesOffsetBegin { get; set; }
+        public int AttributesOffsetEnd { get; set; }
 
 		public int CompressedMapSize => _mapCompressedData.Count;
 		public int SizeX => _dimensions.Item1;
@@ -530,6 +532,9 @@ namespace FFMQLib
 			_referenceTableAddressRaw = rom.Get(_mapAddress, 2);
 			_referenceTableAddress = _mapAddress + 2 + _referenceTableAddressRaw[1] * 0x100 + _referenceTableAddressRaw[0];
 			_tileData = tileprop[_mapAttributes[0] & 0x0F];
+
+            AttributesOffsetBegin = RomOffsets.MapAttributes + mapID * 0x0A;
+            AttributesOffsetEnd = AttributesOffsetBegin + 0x0A;
 
 			_mapCompressedData = new();
 			_mapUncompressed = new();

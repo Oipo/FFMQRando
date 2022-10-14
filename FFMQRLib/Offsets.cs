@@ -42,6 +42,11 @@ namespace FFMQLib
 		public const int AttacksQty = 0xA9;
 		public const int AttacksLength = 0x07;
 
+		// Specific Address for Dark King Attack Links, based on AttacksBank
+		public const int DarkKingAddress = 0xD09E; // Bank 02
+		public const int DarkKingBank = 0x02;
+		public const int DarkKingQty = 0x0C;
+
 		// Enemies' Stats
 		public const int EnemiesStatsAddress = 0xC275; // Bank 02
 		public const int EnemiesStatsBank = 0x02;

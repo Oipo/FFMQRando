@@ -150,15 +150,23 @@ namespace FFMQLib
         public byte MagicPower { get; set; }
         public byte Accuracy { get; set; }
         public byte Evasion { get; set; }
+        public int OffsetBegin { get; set; }
+        public int OffsetEnd { get; set; }
         private int _Id;
         public int Id()
         {
             return _Id;
         }
+        public byte raw(int i)
+        {
+            return _rawBytes[i];
+        }
 
         public Enemy(int id, FFMQRom rom)
         {
             _rawBytes = rom.GetFromBank(RomOffsets.EnemiesStatsBank, RomOffsets.EnemiesStatsAddress + (id * RomOffsets.EnemiesStatsLength), RomOffsets.EnemiesStatsLength);
+            OffsetBegin = rom.GetOffset(RomOffsets.EnemiesStatsBank, RomOffsets.EnemiesStatsAddress + (id * RomOffsets.EnemiesStatsLength));
+            OffsetEnd = OffsetBegin + RomOffsets.EnemiesStatsLength;
 
             _Id = id;
             HP = (ushort)(_rawBytes[1] * 0x100 + _rawBytes[0]);
@@ -191,15 +199,21 @@ namespace FFMQLib
         public byte[] Attacks { get; set; }
         public byte Unknown2 { get; set; }
         public byte Unknown3 { get; set; }
+        public int OffsetBegin { get; set; }
+        public int OffsetEnd { get; set; }
         private int _Id;
         public int Id()
         {
             return _Id;
         }
+        public byte raw(int i)
+        {
+            return _rawBytes[i];
+        }
         public List<int> NeedsSlotsFilled()
         {
-            // Twinhead Wyvern and Twinhead Hydra need their 4th attack slot filled, or the game locks up.
-            if(_Id == 76 || _Id == 77)
+            // Skullrus Rex, Twinhead Wyvern and Twinhead Hydra need their 4th attack slot filled, or the game locks up.
+            if(_Id == 64 || _Id == 76 || _Id == 77)
             {
                 return new List<int>(new int[] {3});
             }
@@ -209,7 +223,10 @@ namespace FFMQLib
         public EnemyAttackLink(int id, FFMQRom rom)
         {
             _rawBytes = rom.GetFromBank(RomOffsets.EnemiesAttackLinksBank, RomOffsets.EnemiesAttackLinksAddress + (id * RomOffsets.EnemiesAttackLinksLength), RomOffsets.EnemiesAttackLinksLength);
+            OffsetBegin = rom.GetOffset(RomOffsets.EnemiesAttackLinksBank, RomOffsets.EnemiesAttackLinksAddress + (id * RomOffsets.EnemiesAttackLinksLength));
+            OffsetEnd = OffsetBegin + RomOffsets.EnemiesAttackLinksLength;
 
+            Console.WriteLine($"EnemyAttackLink id {id}");
             _Id = id;
             Unknown1 = _rawBytes[0];
             Attacks = new byte[6];
@@ -224,6 +241,15 @@ namespace FFMQLib
         }
         public void Write(FFMQRom rom)
         {
+            if(_Id > 70) {
+                Unknown1 = 0x0D;
+                Attacks[0] = 0x40;
+                Attacks[1] = 0x40;
+                Attacks[2] = 0x40;
+                Attacks[3] = 0xFF;
+                Attacks[4] = 0xFF;
+                Attacks[5] = 0xFF;
+            }
             _rawBytes[0] = Unknown1;
             _rawBytes[1] = Attacks[0];
             _rawBytes[2] = Attacks[1];
@@ -451,11 +477,15 @@ namespace FFMQLib
         // my suspicion is that this unknown (or one of the other two) are responsible for targeting self, one PC or both PC.
         public byte Unknown3 { get; set; }
         public byte AttackTargetAnimation { get; set; }
+        public int OffsetBegin { get; set; }
+        public int OffsetEnd { get; set; }
         private int _Id;
 
         public Attack(int id, FFMQRom rom)
         {
             _rawBytes = rom.GetFromBank(RomOffsets.AttacksBank, RomOffsets.AttacksAddress + (id * RomOffsets.AttacksLength), RomOffsets.AttacksLength);
+            OffsetBegin = rom.GetOffset(RomOffsets.AttacksBank, RomOffsets.AttacksAddress + (id * RomOffsets.AttacksLength));
+            OffsetEnd = OffsetBegin + RomOffsets.AttacksLength;
 
             _Id = id;
             Unknown1 = _rawBytes[0];
@@ -469,6 +499,10 @@ namespace FFMQLib
         public int Id()
         {
             return _Id;
+        }
+        public byte raw(int i)
+        {
+            return _rawBytes[i];
         }
 
         public void Write(FFMQRom rom)
