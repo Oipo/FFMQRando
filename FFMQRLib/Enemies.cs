@@ -52,10 +52,17 @@ namespace FFMQLib
         [Description("Simple Shuffle")]
         SimpleShuffle,
     }
+    public enum EnemizerResistance : int
+    {
+        [Description("Standard")]
+        Normal = 0,
+        [Description("Simple Shuffle")]
+        SimpleShuffle,
+    }
     public class EnemiesStats
     {
         private List<Enemy> _enemies;
-        
+
         private const int EnemiesStatsQty = 0x53;
 
         public EnemiesStats(FFMQRom rom)
@@ -146,14 +153,18 @@ namespace FFMQLib
     public class Enemy
     {
         private Blob _rawBytes;
-        
+
         public ushort HP { get; set; }
         public byte AttackPower { get; set; }
         public byte DamageReduction { get; set; }
         public byte Speed { get; set; }
+        public byte ElementalResistance { get; set; }
+        public byte StatusResistance { get; set; }
         public byte MagicPower { get; set; }
         public byte Accuracy { get; set; }
         public byte Evasion { get; set; }
+        public byte ElementalWeakness { get; set; }
+        public byte Counters { get; set; }
         private int _Id;
 
         private const int EnemiesStatsAddress = 0xC275; // Bank 02
@@ -168,6 +179,8 @@ namespace FFMQLib
         public Enemy(int id, FFMQRom rom)
         {
             _rawBytes = rom.GetFromBank(EnemiesStatsBank, EnemiesStatsAddress + (id * EnemiesStatsLength), EnemiesStatsLength);
+            int offset = rom.GetOffset(EnemiesStatsBank, EnemiesStatsAddress) + (id * EnemiesStatsLength);
+            System.Console.WriteLine($"Enemy {id} address {offset.ToString("X2")}");
 
             _Id = id;
             HP = (ushort)(_rawBytes[1] * 0x100 + _rawBytes[0]);
@@ -175,8 +188,12 @@ namespace FFMQLib
             DamageReduction = _rawBytes[3];
             Speed = _rawBytes[4];
             MagicPower = _rawBytes[5];
+            ElementalResistance = _rawBytes[6];
+            StatusResistance = _rawBytes[7];
             Accuracy = _rawBytes[0x0a];
             Evasion = _rawBytes[0x0b];
+            ElementalWeakness = _rawBytes[0x0c];
+            Counters = _rawBytes[0x0d];
         }
         public void Write(FFMQRom rom)
         {
@@ -186,8 +203,12 @@ namespace FFMQLib
             _rawBytes[3] = DamageReduction;
             _rawBytes[4] = Speed;
             _rawBytes[5] = MagicPower;
+            _rawBytes[6] = ElementalResistance;
+            _rawBytes[7] = StatusResistance;
             _rawBytes[0x0a] = Accuracy;
             _rawBytes[0x0b] = Evasion;
+            _rawBytes[0x0c] = ElementalWeakness;
+            _rawBytes[0x0d] = Counters;
             rom.PutInBank(EnemiesStatsBank, EnemiesStatsAddress + (_Id * EnemiesStatsLength), _rawBytes);
         }
     }
@@ -254,7 +275,7 @@ namespace FFMQLib
     {
         private List<EnemyAttackLink> _EnemyAttackLinks;
         private Blob _darkKingAttackLinkBytes;
-        
+
         private const int EnemiesAttackLinksQty = 0x53;
 
         // Dark King Attack Links, separate from EnemiesAttacks
@@ -299,7 +320,7 @@ namespace FFMQLib
                 possibleAttacks.Add(i);
             }
 
-            switch (enemizerattacks) 
+            switch (enemizerattacks)
             {
                 case EnemizerAttacks.Safe:
 
@@ -362,6 +383,33 @@ namespace FFMQLib
 
             }
         }
+        public void ShuffleResistances(EnemizerResistance enemizerresistance, EnemiesStats stats, MT19337 rng)
+        {
+            switch (enemizerresistance)
+            {
+                case EnemizerResistance.SimpleShuffle:
+                    var elementals = stats.Enemies().Select(x => x.ElementalResistance).ToList();
+                    var status = stats.Enemies().Select(x => x.StatusResistance).ToList();
+                    var weakness = stats.Enemies().Select(x => x.ElementalWeakness).ToList();
+                    var counters = stats.Enemies().Select(x => x.Counters).ToList();
+
+                    elementals.Shuffle(rng);
+                    status.Shuffle(rng);
+                    weakness.Shuffle(rng);
+                    counters.Shuffle(rng);
+
+                    for(int i = 0; i < stats.Enemies().Count; i++) {
+                        stats[i].ElementalResistance = elementals[i];
+                        stats[i].StatusResistance = status[i];
+                        stats[i].ElementalWeakness = weakness[i];
+                        stats[i].Counters = counters[i];
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        }
 
         private void _ShuffleAttacks(List<byte> possibleAttacks, MT19337 rng)
         {
@@ -376,7 +424,7 @@ namespace FFMQLib
 
                 for(uint i = 0; i < noOfAttacks; i++)
                 {
-                    ea.Attacks[i] = possibleAttacks[(int)(rng.Next() % possibleAttacks.Count)]; 
+                    ea.Attacks[i] = possibleAttacks[(int)(rng.Next() % possibleAttacks.Count)];
                 }
 
                 // Some values of Unknown1 (e.g. 0x0B) result in the third (or other) attack slot being used
@@ -456,7 +504,7 @@ namespace FFMQLib
                 case EnemiesScaling.Double: scaling = 200; break;
                 case EnemiesScaling.DoubleAndHalf: scaling = 250; break;
             }
-           
+
             switch (flags.EnemiesScalingSpread)
             {
                 case EnemiesScalingSpread.None: spread = 0; break;

@@ -37,15 +37,15 @@
 
 <Container class="sectionBox">
     <div class="box-title text-secondary">
-        Generation       
-    </div> 
+        Generation
+    </div>
 
     <Container Class="flagBox">
         <Container Class="flagColumn">
         @if(!romLoaded)
         {
             <Field class="romFlag">
-                <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">ROM</FieldLabel> 
+                <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">ROM</FieldLabel>
                 <FileEdit Filter=".sfc" AutoReset="false" Changed="@LoadFiles"></FileEdit>
                 <FieldHelp>@romMessage</FieldHelp>
             </Field>
@@ -53,7 +53,7 @@
         else
         {
             <Field class="romFlag">
-                <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">ROM</FieldLabel> 
+                <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">ROM</FieldLabel>
                 <Button Color="Color.Primary" Loading="@isGenerating" Clicked="@OnGenerate" Disabled="@isLoadingRom" class="romBtn">Generate</Button>
                 <FieldHelp>@romMessage</FieldHelp>
             </Field>
@@ -61,7 +61,7 @@
 
             <Fields class="dropFlag">
                 <Field>
-                    <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">Seed</FieldLabel> 
+                    <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">Seed</FieldLabel>
                     <TextEdit Placeholder="Seed" Text="@showSeed" FocusOut="@SeedOnLoseFocus" KeyUp="@SeedOnKeyUp" TextChanged="@SeedOnChanged"/>
                     <FieldHelp>@seedMessage</FieldHelp>
                 </Field>
@@ -74,7 +74,7 @@
         <Container Class="flagColumn">
             <Fields class="dropFlag">
                 <Field>
-                    <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">Flag String</FieldLabel> 
+                    <FieldLabel TextColor="TextColor.Secondary" class="fw-bold">Flag String</FieldLabel>
                     <TextEdit Placeholder="Flag string" Text="@flagString" FocusOut="@FlagsOnLoseFocus" KeyUp="@FlagsOnKeyUp" TextChanged="@FlagsOnChanged"/>
                     <FieldHelp>@flagsMessage</FieldHelp>
                 </Field>
@@ -97,9 +97,9 @@
     <div class="box-title text-secondary">
         Items
         <Tooltip Text="Govern how shuffled Quest Items will be placed.<br /><br />Prioritize: Quest Items will always be found in these locations.<br /><br />Include: Quest Items may be found in these locations.<br /><br />Exclude: Quest Items will never be found in these locations." Inline Multiline Placement="TooltipPlacement.Right">
-            <Icon TextColor="TextColor.Secondary" Name="IconName.QuestionCircle" IconSize=IconSize.Small style="font-size: 0.600em"/> 
-        </Tooltip>       
-    </div> 
+            <Icon TextColor="TextColor.Secondary" Name="IconName.QuestionCircle" IconSize=IconSize.Small style="font-size: 0.600em"/>
+        </Tooltip>
+    </div>
 
     <Container Class="flagBox">
         <Container Class="flagColumn">
@@ -112,7 +112,7 @@
         <Container Class="flagColumn">
             <EnumFlag UsePreset=usePreset Name="Sky Coin Mode" @bind-Value="flags.SkyCoinMode" Tooltip="Configure how the Sky Coin is acquired.<br /><br />Standard: The Sky Coin will be found in a chest.<br /><br />Start With: The Sky Coin will be in your inventory at the start of the game.<br /><br />Save the Crystals: The Sky Coin will be acquired once you save all 4 crystals.<br /><br />Shattered: The Sky Coin is split in 40 fragments; you can enter Doom Castle once the required amount is found." />
             @if (flags.SkyCoinMode == SkyCoinModes.ShatteredSkyCoin)
-            { 
+            {
                 <EnumFlag UsePreset=usePreset Name="Sky Fragments Quantity" @bind-Value="flags.SkyCoinFragmentsQty" Tooltip="Set the number of Sky Coin Fragments required to enter Doom Castle.<br /><br />Random select one of the 3 previous options at random." />
             }
             <BoolFlag UsePreset=usePreset Name="Shuffle Brown Boxes' Content" @bind-Value="flags.ShuffleBoxesContent" Tooltip="If enabled, the content of brown boxes will be shuffled amongst themselves." />
@@ -125,7 +125,7 @@
 <div><br /></div>
 
 <Container class="sectionBox">
-    <div class="box-title text-secondary">Enemies</div> 
+    <div class="box-title text-secondary">Enemies</div>
 
     <Container Class="flagBox">
         <Container Class="flagColumn">
@@ -133,6 +133,7 @@
             <EnumFlag UsePreset=usePreset Name="Enemies' Stats Scaling" @bind-Value="flags.EnemiesScaling" Tooltip="Adjust enemies stats by the selected percentage." />
             <EnumFlag UsePreset=usePreset Name="Scaling Spread" @bind-Value="flags.EnemiesScalingSpread" Tooltip="Add random variation to stats scaling of enemies.<br/><br/>The percentages are additive: eg. scaling of 100% with a spread of 25% means the stats scaling will vary between 75% and 125%." />
             <EnumFlag UsePreset=usePreset Name="Enemizer Attacks" @bind-Value="flags.EnemizerAttacks" Tooltip="Shuffles enemy attacks.<br /><br />Standard: No shuffle.<br /><br />Safe Randomization: Randomize every attack but leave out self-destruct and Dark King attacks<br /><br />Chaos Randomization: Randomize and include self destruct and Dark King attacks<br /><br />Self-destruct: Every enemy self destructs<br /><br />Simple Shuffle: Instead of randomizing, shuffle one monsters attacks to another. Dark King is left vanilla." />
+            <EnumFlag UsePreset=usePreset Name="Enemizer Resistances" @bind-Value="flags.EnemizerResistance" Tooltip="Shuffles enemy resistance, weakness and counters.<br /><br />Standard: No shuffle.<br /><br />Simple Shuffle: Instead of randomizing, shuffle one monsters attacks to another. Dark King is left vanilla." />
         </Container>
         <Container Class="flagColumn">
             <BoolFlag UsePreset=usePreset Name="Shuffle Enemies' Positions" @bind-Value="flags.ShuffleEnemiesPosition" Tooltip="Instead of their original position in a given map, enemies are randomly placed." />
@@ -143,7 +144,7 @@
 <div><br /></div>
 
 <Container class="sectionBox">
-    <div class="box-title text-secondary">Maps</div> 
+    <div class="box-title text-secondary">Maps</div>
 
     <Container Class="flagBox">
         <Container Class="flagColumn">
@@ -159,7 +160,7 @@
 <div><br /></div>
 
 <Container class="sectionBox">
-    <div class="box-title text-secondary">Other</div> 
+    <div class="box-title text-secondary">Other</div>
 
     <Container Class="flagBox">
         <Container Class="flagColumn">
@@ -176,7 +177,7 @@
 <div><br /></div>
 
 <Container class="sectionBox">
-    <div class="box-title text-secondary">Preferences</div> 
+    <div class="box-title text-secondary">Preferences</div>
     <div class="text-secondary">Preferences doesn't affect the randomization and can be enabled/disabled without any impact on gameplay.</div>
     <Container Class="flagBox">
         <Container Class="flagColumn">
@@ -234,7 +235,7 @@
         {
             if (updateFlagString)
             {
-                tempFlagString = flags.GenerateFlagString();                
+                tempFlagString = flags.GenerateFlagString();
                 UpdateUrl();
             }
             return tempFlagString;
@@ -436,7 +437,7 @@
             usePreset = false;
             StateHasChanged();
         }
-        else 
+        else
         {
             await LoadYamlFromStreamReader(action.name);
             usePreset = action.usepreset;
@@ -462,7 +463,7 @@
     }
 
     private void UpdateUrl()
-    { 
+    {
         var uri = new Uri(NavigationManager.Uri);
 
         var test = NavigationManager.GetUriWithQueryParameters(new Dictionary<string, object>
@@ -481,14 +482,14 @@
 
         if (qmarkIndex == -1)
         {
-            return ""; 
+            return "";
         }
         else if (qmarkIndex > hashIndex)
         {
             return uristring.Remove(0, qmarkIndex);
         }
         else
-        { 
+        {
             return uristring.Remove(hashIndex).Remove(0, qmarkIndex);
         }
     }
@@ -506,7 +507,7 @@
         }
         else
         {
-            RollSeed();            
+            RollSeed();
         }
 
         var flagsParameter = HttpUtility.ParseQueryString(parsableUri).Get("f");
@@ -555,7 +556,7 @@
                 pref.SetValue(preferences, localStorage.GetItem<bool>(pref.Name));
             }
             else if(pref.PropertyType == typeof(string))
-            { 
+            {
                 pref.SetValue(preferences, localStorage.GetItem<string>(pref.Name));
             }
         }
@@ -642,7 +643,7 @@
         try
         {
             if (showSeed.Length > 8)
-            { 
+            {
                 showSeed = showSeed.Remove(8);
             }
             showSeed = showSeed.PadLeft(8, '0');

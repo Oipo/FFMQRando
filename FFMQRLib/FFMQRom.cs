@@ -10,7 +10,7 @@ namespace FFMQLib
 {
 	public static class Metadata
 	{
-		public static string Version = "1.3.01";
+		public static string Version = "1.3.02";
 	}
 	public partial class FFMQRom : SnesRom
 	{
@@ -99,7 +99,7 @@ namespace FFMQLib
 			{
 				var stream = new MemoryStream();
 				var writer = new StreamWriter(stream);
-				
+
 				writer.Write(spoilersText);
 				writer.Flush();
 				stream.Position = 0;
@@ -189,6 +189,7 @@ namespace FFMQLib
 			MapObjects.SetEnemiesDensity(flags.EnemiesDensity, rng);
 			MapObjects.ShuffleEnemiesPosition(flags.ShuffleEnemiesPosition, GameMaps, rng);
 			EnemyAttackLinks.ShuffleAttacks(flags.EnemizerAttacks, rng);
+			EnemyAttackLinks.ShuffleResistances(flags.EnemizerResistance, enemiesStats, rng);
 			enemiesStats.ScaleEnemies(flags, rng);
 
 			// Overworld
@@ -219,7 +220,7 @@ namespace FFMQLib
 			Msu1SupportRandom(preferences.RandomMusic, sillyrng);
 			RandomBenjaminPalette(preferences.RandomBenjaminPalette, sillyrng);
 
-			// Write everything back			
+			// Write everything back
 			itemsPlacement.WriteChests(this);
 			credits.Write(this);
 			EnemyAttackLinks.Write(this);
@@ -241,7 +242,7 @@ namespace FFMQLib
 			// Spoilers
 			spoilersText = itemsPlacement.GenerateSpoilers(this, titleScreen.versionText, titleScreen.hashText, flags.GenerateFlagString(), seed.ToHex());
 			spoilers = flags.EnableSpoilers;
-			
+
 			// Remove header if any
 			this.Header = Array.Empty<byte>();
 		}

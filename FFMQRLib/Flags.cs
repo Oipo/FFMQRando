@@ -25,6 +25,7 @@ namespace FFMQLib
         public EnemiesScaling EnemiesScaling { get; set; } = EnemiesScaling.Normal;
         public EnemiesScalingSpread EnemiesScalingSpread { get; set; } = EnemiesScalingSpread.None;
         public EnemizerAttacks EnemizerAttacks { get; set; } = EnemizerAttacks.Normal;
+        public EnemizerResistance EnemizerResistance { get; set; } = EnemizerResistance.Normal;
         public LevelingCurve LevelingCurve { get; set; } = LevelingCurve.Normal;
         public BattlesQty BattlesQuantity { get; set; } = BattlesQty.Ten;
         public bool ShuffleBattlefieldRewards { get; set; } = false;
@@ -92,7 +93,7 @@ namespace FFMQLib
                             flag.SetValue(this, enumValue);
                         }
                     }
-                    
+
                     numflagstring /= enumValues.Length;
                 }
             }
@@ -105,7 +106,7 @@ namespace FFMQLib
             {
                 throw new Exception("Selected flags don't allow enough locations to place all Quest Items. Change flags to include more locations.");
             }
-            
+
             // Throw an error if the settings don't offer enough locations.
             if (SkyCoinMode == SkyCoinModes.ShatteredSkyCoin && BoxesShuffle == ItemShuffleBoxes.Exclude)
             {
@@ -211,7 +212,7 @@ namespace FFMQLib
             }
 
             var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(UnderscoredNamingConvention.Instance)  // see height_in_inches in sample yml 
+                .WithNamingConvention(UnderscoredNamingConvention.Instance)  // see height_in_inches in sample yml
                 .Build();
 
             var result = deserializer.Deserialize<Flags>(newyaml);

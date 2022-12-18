@@ -54,8 +54,8 @@ Dark Knight phases 2, 3 and 4 do not use the attack ids in the table, but rather
 #### Enemy Attack Options (bytes 1 through X)
 
 Shamelessly copied from Guard_Master's pro action replay guide:
-19 = [Skips Turn]           73 = Sting                A8 = Body Odor
-1B = Bare Hands             74 = Tail                 A9 = Para-stare
+19 = [Skips Turn] (BAD)     73 = Sting                A8 = Body Odor
+1B = Bare Hands   (BAD)     74 = Tail                 A9 = Para-stare
 40 = Sword                  75 = Psudopod             AA = Poison Fluid
 41 = Scimitar               76 = Bite                 AB = Poison Flour
 42 = Dragon Cut             77 = Hydro Acid           AC = Hypno-sleep
@@ -189,3 +189,9 @@ For the Slime and Brownie, setting every raw byte for enemies to 0:
 | 217 | Self destruct |
 | 218 | Multiply |
 | 221 | A high critical chance regular attack |
+
+# Fennor's excel sheet
+
+https://docs.google.com/spreadsheets/d/15OD4jRzb_gFavgW9ni0XVgvkipaJJI9kWju08CqEdzE/edit#gid=836361787
+
+Fennor made an excel sheet documenting a lot of the ROM addresses 
