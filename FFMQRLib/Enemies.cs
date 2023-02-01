@@ -362,6 +362,7 @@ namespace FFMQLib
                         _darkKingAttackLinkBytes[i] = 0xC1;
                     }
                     break;
+                // Simple shuffle does not shuffle _darkKingAttackLinkBytes, so Dark King should not have any different attacks
                 case EnemizerAttacks.SimpleShuffle:
                     var origLinks = new List<EnemyAttackLink>(_EnemyAttackLinks);
                     _EnemyAttackLinks.Shuffle(rng);
@@ -450,11 +451,16 @@ namespace FFMQLib
                 }
             }
 
-            // Dark King has its own byte range on top of attack links ids 79 through 82
+            // Dark King has its own byte range aside from attack links ids 80 through 82
             // TODO: The Ice Golem has a special healing blizzard it does when it has < 50% HP, probably want to randomise that as well? Maybe more enemies have a similar thing?
             for(int i = 0; i < DarkKingAttackLinkQty; i++)
             {
                 _darkKingAttackLinkBytes[i] = possibleAttacks[(int)(rng.Next() % possibleAttacks.Count)];
+                // Dark king cannot use drain on Benjamin, as it causes the overflow glitch
+                if(_darkKingAttackLinkBytes[i] == 0xBE)
+                {
+                    _darkKingAttackLinkBytes[i]--;
+                }
             }
         }
     }
